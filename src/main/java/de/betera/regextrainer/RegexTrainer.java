@@ -6,10 +6,10 @@ import java.awt.Component;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -18,6 +18,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 
@@ -37,7 +39,7 @@ public class RegexTrainer {
 		while (matcher.find()) {
 			int groupStart = matcher.start();
 			int groupEnd = matcher.end();
-			if(groupEnd - groupStart == 0) {
+			if (groupEnd - groupStart == 0) {
 				continue;
 			}
 			try {
@@ -53,6 +55,12 @@ public class RegexTrainer {
 
 	private void doChangeFont(JComponent comp, int size) {
 		comp.setFont(comp.getFont().deriveFont((float) size));
+		if (!(comp instanceof JPanel)) {
+			comp.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
+		}
+		if(comp instanceof JButton) {
+			comp.setBorder(new EmptyBorder(4,4,4,4));
+		}
 		for (Component c : comp.getComponents()) {
 			doChangeFont((JComponent) c, size);
 		}
@@ -91,9 +99,15 @@ public class RegexTrainer {
 		input.setColumns(50);
 		clear = new JButton("Clear");
 		apply = new JButton("Apply");
-		apply.addActionListener(e -> { textArea.getHighlighter().removeAllHighlights(); findByRegex(input.getText()); });
+		apply.addActionListener(e -> {
+			textArea.getHighlighter().removeAllHighlights();
+			findByRegex(input.getText());
+		});
 
-		clear.addActionListener(e -> { input.setText(""); textArea.getHighlighter().removeAllHighlights(); });
+		clear.addActionListener(e -> {
+			input.setText("");
+			textArea.getHighlighter().removeAllHighlights();
+		});
 
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BorderLayout(4, 4));
@@ -104,11 +118,12 @@ public class RegexTrainer {
 		buttonPanel.add(clear, BorderLayout.EAST);
 		northPanel.add(buttonPanel, BorderLayout.EAST);
 
-		frame.getContentPane().setLayout(new BorderLayout(8, 8));
+		frame.getContentPane().setLayout(new BorderLayout(4, 4));
 		frame.getContentPane().add(textArea, BorderLayout.CENTER);
 		frame.getContentPane().add(northPanel, BorderLayout.NORTH);
 
 		changeFont(fontSize);
+		((JPanel) frame.getContentPane()).setBorder(BorderFactory.createLineBorder(new Color(240, 240, 240), 3));
 		frame.pack();
 
 		frame.setVisible(true);
