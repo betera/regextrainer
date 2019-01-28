@@ -37,6 +37,9 @@ public class RegexTrainer {
 		while (matcher.find()) {
 			int groupStart = matcher.start();
 			int groupEnd = matcher.end();
+			if(groupEnd - groupStart == 0) {
+				continue;
+			}
 			try {
 				textArea.getHighlighter().addHighlight(groupStart, groupEnd,
 						new DefaultHighlighter.DefaultHighlightPainter(new Color(200, 220, 255)));
