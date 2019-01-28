@@ -88,7 +88,7 @@ public class RegexTrainer {
 		input.setColumns(50);
 		clear = new JButton("Clear");
 		apply = new JButton("Apply");
-		apply.addActionListener(e -> findByRegex(input.getText()));
+		apply.addActionListener(e -> { textArea.getHighlighter().removeAllHighlights(); findByRegex(input.getText()); });
 
 		clear.addActionListener(e -> { input.setText(""); textArea.getHighlighter().removeAllHighlights(); });
 
